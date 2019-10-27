@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Bogus" Version="28.4.1" />
+    <PackageReference Include="Gu.Wpf.PropertyGrid" Version="2.3.0" />
+    <PackageReference Include="PropertyTools" Version="3.0.0" />
+    <PackageReference Include="PropertyTools.Wpf" Version="3.0.0" />
+    <PackageReference Include="SoftFluent.Windows" Version="1.0.1.6" />
+    <PackageReference Include="Unity" Version="5.11.1" />
+    <PackageReference Include="Unity.Container" Version="5.11.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ETMProfileEditor.BLL\ETMProfileEditor.BLL.csproj" />
+    <ProjectReference Include="..\ETMProfileEditor.Common\ETMProfileEditor.Common.csproj" />
+    <ProjectReference Include="..\ETMProfileEditor.DAL\ETMProfileEditor.DAL.csproj" />
+    <ProjectReference Include="..\ETMProfileEditor.Model\ETMProfileEditor.Model.csproj" />
+    <ProjectReference Include="..\ETMProfileEditor.View\ETMProfileEditor.View.csproj" />
+    <ProjectReference Include="..\ETMProfileEditror.ViewModel\ETMProfileEditor.ViewModel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\" />
+  </ItemGroup>
+
+</Project>

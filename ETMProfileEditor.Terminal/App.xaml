@@ -1,0 +1,125 @@
+﻿<Application x:Class="ETMProfileEditor.Terminal.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:ETMProfileEditor.Terminal"
+             xmlns:viewmodel="clr-namespace:ETMProfileEditor.ViewModel;assembly=ETMProfileEditor.ViewModel"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+          >
+    <Application.Resources>
+        <ResourceDictionary>
+
+            <!--<DataTemplate DataType="{x:Type viewmodel:Step}"  >
+                <Border>
+                    <Grid Margin="4" Width="200" Height="40" Background="Gainsboro">
+                        <TextBlock Text="{Binding Description,Mode=OneWay}"></TextBlock>
+                    </Grid>
+                </Border>
+            </DataTemplate>-->
+            <DataTemplate DataType="{x:Type viewmodel:MapperStep}"  >
+                <Border>
+                    <Grid Margin="4" Width="200" Height="40" Background="Gainsboro">
+                        <TextBlock Text="{Binding Description,Mode=OneWay}"></TextBlock>
+                    </Grid>
+                </Border>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodel:Profile}">
+                <Border>
+                    <Grid Margin="4" Width="200" Height="40">
+                        <TextBlock Text="{Binding Text}"></TextBlock>
+                    </Grid>
+                </Border>
+            </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type viewmodel:SelectDeleteItem}">
+                <Grid>
+                    <Ellipse Height="30" Width="30" >
+                        <Ellipse.Fill>
+                            <SolidColorBrush Color="{StaticResource Primary500}" />
+                        </Ellipse.Fill>
+                    </Ellipse>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">A</TextBlock>
+                </Grid>
+            </DataTemplate>
+            
+            <SolidColorBrush x:Key="HighlightBrush" Color="{DynamicResource Primary700}" />
+            <SolidColorBrush x:Key="AccentColorBrush" Color="{DynamicResource Primary500}" />
+            <SolidColorBrush x:Key="AccentColorBrush2" Color="{DynamicResource Primary400}" />
+            <SolidColorBrush x:Key="AccentColorBrush3" Color="{DynamicResource Primary300}" />
+            <SolidColorBrush x:Key="AccentColorBrush4" Color="{DynamicResource Primary200}" />
+            <SolidColorBrush x:Key="WindowTitleColorBrush" Color="{DynamicResource Primary700}" />
+            <SolidColorBrush x:Key="AccentSelectedColorBrush" Color="{DynamicResource Primary500Foreground}" />
+            <LinearGradientBrush x:Key="ProgressBrush" EndPoint="0.001,0.5" StartPoint="1.002,0.5">
+                <GradientStop Color="{DynamicResource Primary700}" Offset="0" />
+                <GradientStop Color="{DynamicResource Primary300}" Offset="1" />
+            </LinearGradientBrush>
+            <SolidColorBrush x:Key="CheckmarkFill" Color="{DynamicResource Primary500}" />
+            <SolidColorBrush x:Key="RightArrowFill" Color="{DynamicResource Primary500}" />
+            <SolidColorBrush x:Key="IdealForegroundColorBrush" Color="{DynamicResource Primary500Foreground}" />
+            <SolidColorBrush x:Key="IdealForegroundDisabledBrush" Color="{DynamicResource Primary500}" Opacity="0.4" />
+            
+
+            <ResourceDictionary.MergedDictionaries>
+                <!-- MahApps -->
+                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />-->
+
+                <!-- Material Design -->
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.LightBlue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.CheckBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ListBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.PopupBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.RadioButton.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.TextBlock.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ToggleButton.xaml" />
+
+                <!-- Material Design: MahApps Compatibility -->
+                <!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.MahApps;component/Themes/MaterialDesignTheme.MahApps.Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.MahApps;component/Themes/MaterialDesignTheme.MahApps.Flyout.xaml" />-->
+            
+
+            <!-- MahApps Brushes -->
+       
+            </ResourceDictionary.MergedDictionaries>
+
+            <!--<DataTemplate DataType="{x:Type model:Profile}">
+                <Border>
+                    <Grid Margin="4">
+
+                        <xctk:PropertyGrid x:Name="_propertyGrid" Width="450" Margin="10"    SelectedObject="{Binding}"   AutoGenerateProperties="True">
+                            --><!-- Only the following properties will be displayed in the PropertyGrid --><!--
+                        </xctk:PropertyGrid>
+                    </Grid>
+                </Border>
+            </DataTemplate>-->
+            <!--<DataTemplate DataType="{x:Type viewmodel:Step}">
+                <Border>
+                    <Grid Margin="4">
+
+                        <xctk:PropertyGrid x:Name="_propertyGrid" Width="450" Margin="10"   SelectedObject="{Binding}"  AutoGenerateProperties="True">
+                            --><!-- Only the following properties will be displayed in the PropertyGrid --><!--
+                        </xctk:PropertyGrid>
+                    </Grid>
+                </Border>
+            </DataTemplate>-->
+   
+            <!--<DataTemplate DataType="{x:Type viewmodel:Step}">
+                <Border>
+                    <Grid Margin="4">
+
+                        <xctk:PropertyGrid x:Name="_propertyGrid" Width="450" Margin="10"   SelectedObject="{Binding}"  AutoGenerateProperties="True">
+                            --><!-- Only the following properties will be displayed in the PropertyGrid --><!--
+                        </xctk:PropertyGrid>
+                    </Grid>
+                </Border>
+            </DataTemplate>-->
+
+  
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

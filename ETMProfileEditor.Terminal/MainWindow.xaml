@@ -1,0 +1,46 @@
+﻿<Window x:Class="ETMProfileEditor.Terminal.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ETMProfileEditor.Terminal"
+        xmlns:view="clr-namespace:ETMProfileEditor.View;assembly=ETMProfileEditor.View"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
+        d:DataContext="{d:DesignInstance local:DesignViewModel, IsDesignTimeCreatable=True}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        mc:Ignorable="d"
+        xmlns:gu="http://gu.se/PropertyGrid"
+        xmlns:sf="clr-namespace:SoftFluent.Windows;assembly=SoftFluent.Windows"
+        xmlns:pt="clr-namespace:PropertyTools.Wpf;assembly=PropertyTools.Wpf"
+        Title="MainWindow" Height="450" Width="1500">
+
+    <TabControl>
+        <TabItem Header="Main">
+            <DockPanel>
+                <ToolBar DockPanel.Dock="Top" ToolTip="">
+
+                    <!--<Button ToolTip="New">
+                        <materialDesign:PackIcon Kind="File" />
+                    </Button>
+                    <Button ToolTip="Open">
+                        <materialDesign:PackIcon Kind="FileImport" />
+                    </Button>-->
+                    <Button ToolTip="Save" Command="{Binding SaveCommand}">
+                        <materialDesign:PackIcon Kind="ContentSave" />
+                    </Button>
+                </ToolBar>
+                <view:RepositoryView DataContext="{Binding RepositoryViewModel}" >
+                    <view:RepositoryView.ItemTemplate>
+                        <DataTemplate>
+                            <local:MasterDetailView ></local:MasterDetailView>
+                        </DataTemplate>
+                    </view:RepositoryView.ItemTemplate>
+                </view:RepositoryView>
+            </DockPanel>
+        </TabItem>
+        <TabItem Header="Repo">
+            <view:RepositoryView></view:RepositoryView>
+        </TabItem>
+    </TabControl>
+</Window>
