@@ -1,7 +1,6 @@
 ﻿using ETMProfileEditor.BLL;
 using ETMProfileEditor.Contract;
 using ETMProfileEditor.Model;
-using ETMProfileEditor.View;
 using System.Windows;
 using Unity;
 
@@ -23,10 +22,10 @@ namespace ETMProfileEditor.Terminal
             UnityContainer container = new UnityContainer();
 
             container.RegisterType<ISelect<Limit>, DAL.LimitRepository>();
-            container.RegisterType<IRepository<ViewModel.Profile,string>, DAL.ProfileRepository>();
+            container.RegisterType<IRepository<ViewModel.Profile, string>, DAL.ProfileRepository>();
             container.RegisterType<IFactory<ViewModel.Profile>, ProfileFactory>();
             container.RegisterInstance<IDispatcher>(new View.Dispatcher(this.Dispatcher));
-            
+
             container.Resolve<MainWindow>().Show();
         }
     }

@@ -1,5 +1,4 @@
-﻿
-using Microsoft.Xaml.Behaviors;
+﻿using Microsoft.Xaml.Behaviors;
 using System;
 using System.ComponentModel;
 using System.Reflection;
@@ -30,9 +29,7 @@ namespace Mvvm.Actions
             DependencyProperty.Register("PropertyName", typeof(string), typeof(SetterAction),
             new PropertyMetadata(String.Empty));
 
-        #endregion
-
-
+        #endregion PropertyName
 
         public IValueConverter Converter
         {
@@ -44,7 +41,6 @@ namespace Mvvm.Actions
         public static readonly DependencyProperty ConverterProperty =
             DependencyProperty.Register("Converter", typeof(IValueConverter), typeof(SetterAction), new PropertyMetadata(null));
 
-
         public object ConverterParameter
         {
             get { return (object)GetValue(ConverterParameterProperty); }
@@ -54,8 +50,6 @@ namespace Mvvm.Actions
         // Using a DependencyProperty as the backing store for ConverterParameter.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ConverterParameterProperty =
             DependencyProperty.Register("ConverterParameter", typeof(object), typeof(SetterAction), new PropertyMetadata(null));
-
-
 
         #region Value
 
@@ -72,9 +66,9 @@ namespace Mvvm.Actions
             DependencyProperty.Register("Value", typeof(object), typeof(SetterAction),
             new PropertyMetadata(null));
 
-        #endregion
+        #endregion Value
 
-        #endregion
+        #endregion Properties
 
         #region Overrides
 
@@ -93,7 +87,6 @@ namespace Mvvm.Actions
 
             object convertedValue = null;
 
-
             var valueType = Value?.GetType();
             var propertyType = property.PropertyType;
 
@@ -111,20 +104,15 @@ namespace Mvvm.Actions
 
                 if (propertyConverter.CanConvertFrom(valueType))
                     convertedValue = propertyConverter.ConvertFrom(Value);
-
                 else if (valueType.IsSubclassOf(propertyType))
                     convertedValue = Value;
-
                 else
                     throw new ArgumentException(String.Format("Cannot convert type '{0}' to '{1}'.", valueType, propertyType));
             }
 
-
-
             property.SetValue(target, convertedValue);
         }
 
-        #endregion
+        #endregion Overrides
     }
 }
-

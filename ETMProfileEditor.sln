@@ -14,7 +14,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ETMProfileEditor.View", "ET
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ETMProfileEditor.Model", "ETMProfileEditor.Model\ETMProfileEditor.Model.csproj", "{4F561FC8-25DF-4041-8E5B-F0ECBFE9B95A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ETMProfileEditor.ViewModel", "ETMProfileEditror.ViewModel\ETMProfileEditor.ViewModel.csproj", "{90241D0A-C60B-43C6-A7C1-82C80B5C94EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ETMProfileEditor.ViewModel", "ETMProfileEditor.ViewModel\ETMProfileEditor.ViewModel.csproj", "{90241D0A-C60B-43C6-A7C1-82C80B5C94EB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ETMProfileEditor.DAL", "ETMProfileEditor.DAL\ETMProfileEditor.DAL.csproj", "{6597773F-98ED-485D-8767-344307F8942D}"
 EndProject

@@ -1,4 +1,5 @@
 ﻿using Reactive.Bindings;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,8 +8,6 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System;
 using System.Windows.Input;
 
 namespace ETMProfileEditor.View
@@ -21,10 +20,6 @@ namespace ETMProfileEditor.View
         private ISubject<IEnumerable> ItemChanges = new Subject<IEnumerable>();
         private ISubject<string> KeyChanges = new Subject<string>();
 
-
-
-
-
         public IEnumerable Types
         {
             get { return (IEnumerable)GetValue(TypesProperty); }
@@ -34,8 +29,6 @@ namespace ETMProfileEditor.View
         // Using a DependencyProperty as the backing store for Types.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty TypesProperty =
             DependencyProperty.Register("Types", typeof(IEnumerable), typeof(MasterView), new PropertyMetadata(null));
-
-
 
         public DataTemplate ItemTemplate
         {
@@ -47,12 +40,9 @@ namespace ETMProfileEditor.View
         public static readonly DependencyProperty ItemTemplateProperty =
             DependencyProperty.Register("ItemTemplate", typeof(DataTemplate), typeof(MasterView), new PropertyMetadata(null));
 
-
-
         public ICommand RemoveItemCommand { get; } = new ReactiveCommand<object>();
 
-
-        private ReactiveCollection<IndexedObject> objects;
+        public ReactiveCollection<IndexedObject> Objects { get; }
 
         public IEnumerable Items
         {
@@ -99,15 +89,11 @@ namespace ETMProfileEditor.View
                 (item).GetBindingExpression(Control.IsEnabledProperty)?.UpdateTarget();
             }
 
-            CollectionChangeEventArgs args = new CollectionChangeEventArgs(CollectionChangeEvent, objects.ToDictionary(a => a.Value, a => a.Index));
+            CollectionChangeEventArgs args = new CollectionChangeEventArgs(CollectionChangeEvent, Objects.ToDictionary(a => a.Value, a => a.Index));
             RaiseEvent(args);
-
         }
 
         public delegate void TabsEventHandler(object sender, CollectionChangeEventArgs e);
-
-
-
 
         public delegate void Tabs2EventHandler(object sender, SelectionChangeEventArgs e);
 
@@ -125,12 +111,7 @@ namespace ETMProfileEditor.View
             RaiseEvent(args);
         }
 
-
-
-
-
-        public ICollectionView CollectionView { get; }
-
+        //public ICollectionView CollectionView { get; }
 
         public MasterView()
         {
@@ -143,7 +124,7 @@ namespace ETMProfileEditor.View
 
             ItemChanges.Where(a => a == null).Subscribe(a =>
             {
-                objects.Clear();
+                Objects.Clear();
                 dictionart = new Dictionary<object, object>();
             });
 
@@ -151,7 +132,7 @@ namespace ETMProfileEditor.View
         {
             var type = a.Cast<object>().First().GetType();
             var pi = type.GetProperty(b);
-            Types = Types ?? ETMProfileEditor.Common.TypeHelper.Filter(type).ToArray();
+            Types = Types ?? ETMProfileEditor.Common.TypeHelper.Filter(type.BaseType).ToArray();
 
             var xx = a.Cast<object>()
             .GroupBy(b =>
@@ -170,18 +151,12 @@ namespace ETMProfileEditor.View
             return tempobjects
             .ToObservable();
 
-
             //.Scan((0,default),(a,b)=>((a.Item1 += 1,a.Item2.Single(),b)))
             //.Scan((0, default(object)), (a, b) => (a.Item1 + 1, b))
             //.Select(a => new IndexedObject(a.Item2, a.Item1));
         });
 
-
-
-
-
-
-            objects = xd.SelectMany(a => a).ToReactiveCollection();
+            Objects = xd.SelectMany(a => a).ToReactiveCollection();
 
             var l = Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>(ev => this.Loaded += ev, ev => this.Loaded -= ev);
 
@@ -202,39 +177,30 @@ namespace ETMProfileEditor.View
             //        }, System.Windows.Threading.DispatcherPriority.Background);
             //    });
 
-
-
-            CollectionView = CollectionViewSource.GetDefaultView(objects);
-            CollectionView.SortDescriptions.Add(new SortDescription("Index", ListSortDirection.Ascending));
+            //CollectionView = CollectionViewSource.GetDefaultView(Objects);
+            //CollectionView.SortDescriptions.Add(new SortDescription("Index", ListSortDirection.Ascending));
 
             //ListView.Items.IsLiveSorting = true;
             //ListView.ItemsSource = icv;
-
 
             (RemoveItemCommand as ReactiveCommand<object>)
             .Subscribe(a =>
             {
                 Remove_Click(null, null);
             });
-
-
         }
-
-
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
-
             RaiseClickEvent();
         }
 
         private void Remove_Click(object sender, RoutedEventArgs e)
         {
-
             var bject = ((IndexedObject)ListView.SelectedItem);
 
             var index = (ListView.SelectedItem as IndexedObject).Index;
-            objects.Remove(bject);
+            Objects.Remove(bject);
             if (ListView.Items.Cast<object>().Any())
             {
                 ListView.SelectedItem = ListView.Items[0];
@@ -244,7 +210,7 @@ namespace ETMProfileEditor.View
             {
                 x.Index -= 1;
             }
-            CollectionView.Refresh();
+
             RaiseClickEvent();
         }
 
@@ -275,7 +241,6 @@ namespace ETMProfileEditor.View
                 ListView.SelectedIndex = e.RemovedItems.Cast<IndexedObject>().First().Index;
             }
 
-
             RaiseClickEvent2(e.AddedItems.Cast<object>().Any());
             RaiseClickEvent();
         }
@@ -289,7 +254,7 @@ namespace ETMProfileEditor.View
                 (ListView.Items[index - 1] as IndexedObject).Index += 1;
                 bject.Index -= 1;
 
-                CollectionView.Refresh();
+                //CollectionView.Refresh();
             }
         }
 
@@ -302,7 +267,7 @@ namespace ETMProfileEditor.View
                 var index = ListView.Items.IndexOf(bject);
                 (ListView.Items[index + 1] as IndexedObject).Index -= 1;
                 bject.Index += 1;
-                CollectionView.Refresh();
+                //CollectionView.Refresh();
             }
         }
 
@@ -315,8 +280,8 @@ namespace ETMProfileEditor.View
             {
                 x.Index += 1;
             }
-            this.objects.Add((new IndexedObject(xx, index + 1)));
-            CollectionView.Refresh();
+            this.Objects.Add((new IndexedObject(xx, index + 1)));
+            //CollectionView.Refresh();
         }
     }
 }

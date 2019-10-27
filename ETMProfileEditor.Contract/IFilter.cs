@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace ETMProfileEditor.Contract
 {
-    public interface IFilter<T,Tr>
+    public interface IFilter<T, Tr>
     {
         IEnumerable<Tr> Filter(T t);
     }

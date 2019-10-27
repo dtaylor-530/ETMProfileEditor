@@ -1,17 +1,6 @@
 ﻿using MaterialDesignThemes.Wpf;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ETMProfileEditor.View
 {
@@ -21,7 +10,6 @@ namespace ETMProfileEditor.View
     public partial class RepositoryView : UserControl
     {
         //private readonly SnackbarMessage undo;
-
 
         public DataTemplate ItemTemplate
         {
@@ -38,7 +26,6 @@ namespace ETMProfileEditor.View
             (d as RepositoryView).ContentPresenter1.ContentTemplate = (DataTemplate)e.NewValue;
         }
 
-
         public static readonly RoutedEvent CollectionChangeEvent =
 EventManager.RegisterRoutedEvent("CollectionChange", RoutingStrategy.Bubble,
 typeof(TabsEventHandler), typeof(RepositoryView));
@@ -49,14 +36,11 @@ typeof(TabsEventHandler), typeof(RepositoryView));
             remove { RemoveHandler(CollectionChangeEvent, value); }
         }
 
-
         public delegate void TabsEventHandler(object sender, CollectionChangeEventArgs e);
 
-     
-
         public RepositoryView()
-        { 
-            InitializeComponent();      
+        {
+            InitializeComponent();
         }
 
         private void Undo_ActionClick(object sender, RoutedEventArgs e)
@@ -79,6 +63,7 @@ typeof(TabsEventHandler), typeof(RepositoryView));
 
         private void Sample1_DialogHost_OnDialogClosing(object sender, DialogClosingEventArgs eventArgs)
         {
+            FruitTextBox.Text = string.Empty;
         }
     }
 }

@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Windows;
 using System.Windows.Markup;
 using System.Xml;
 
 namespace ETMProfileEditor.View.Common
 {
-    class DataTemplateFactory
+    internal class DataTemplateFactory
     {
-
         public DataTemplate Create(Type type)
         {
             StringReader stringReader = new StringReader(

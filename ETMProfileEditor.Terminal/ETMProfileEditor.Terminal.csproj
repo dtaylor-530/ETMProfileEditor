@@ -22,7 +22,7 @@
     <ProjectReference Include="..\ETMProfileEditor.DAL\ETMProfileEditor.DAL.csproj" />
     <ProjectReference Include="..\ETMProfileEditor.Model\ETMProfileEditor.Model.csproj" />
     <ProjectReference Include="..\ETMProfileEditor.View\ETMProfileEditor.View.csproj" />
-    <ProjectReference Include="..\ETMProfileEditror.ViewModel\ETMProfileEditor.ViewModel.csproj" />
+    <ProjectReference Include="..\ETMProfileEditor.ViewModel\ETMProfileEditor.ViewModel.csproj" />
   </ItemGroup>
 
   <ItemGroup>

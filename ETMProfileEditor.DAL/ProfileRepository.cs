@@ -1,13 +1,12 @@
-﻿using ETMProfileEditor.ViewModel;
-using LiteDB;
-using Optional;
+﻿using LiteDB;
 using System.Collections.Generic;
 
 namespace ETMProfileEditor.DAL
 {
     using Contract;
+    using ViewModel;
 
-    public class ProfileRepository:IRepository<Profile,string>
+    public class ProfileRepository : IRepository<Profile, string>
     {
         //public void sfd()
         //{

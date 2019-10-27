@@ -77,19 +77,10 @@ namespace ETMProfileEditor.ViewModel
 
             (AddCommand as ReactiveCommand<bool>)
                 .Where(b=>b)
-                .Zip((NameChangedCommand as ReactiveCommand<string>), (bl,text) => text)
+                .WithLatestFrom((NameChangedCommand as ReactiveCommand<string>), (bl,text) => text)
                 .Subscribe(text =>
                  {
-                     Items.Add(new SelectDeleteItem(
-                                new
-                                {
-                                    Profile = profileFactory.Build(text),
-                                    Key = nameof(Step.Description),
-                                    Types = Common.TypeHelper.Filter<ViewModel.Step>().ToArray()
-                 }));
-
-
-               
+                     Items.Add(new SelectDeleteItem(profileFactory.Build(text)));
                  });
            
             SelectedItem = selects.Merge(selects2).Where(a => a.Key).Select(a => a.Value).ToReactiveProperty();

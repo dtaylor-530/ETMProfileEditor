@@ -1,25 +1,21 @@
-﻿
-using Bogus;
-using ETMProfileEditor.Contract;
-using ETMProfileEditor.ViewModel;
+﻿using Bogus;
 using Reactive.Bindings;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace ETMProfileEditor.Terminal
 {
+    using ViewModel;
+
     public class DesignViewModel
     {
         //public ReactiveProperty<bool> IsValid { get;  }
 
         public ICollection<Step> Items { get; }
-        
+
         //public ICollection<Type> Types { get; }
 
         public string Key { get; }
-
-
 
         /// <summary>
         /// Track that has been selected by the user.
@@ -48,7 +44,6 @@ namespace ETMProfileEditor.Terminal
 .RuleFor(o => o.IdleSpeed, f => f.Random.Double(0, 10))
 .RuleFor(o => o.Index, f => f.IndexVariable);
 
-
             var testOrders2 = new Faker<TractionStep>()
 //Ensure all properties have rules. By default, StrictMode is false
 //Set a global policy by using Faker.DefaultStrictMode
@@ -65,9 +60,7 @@ namespace ETMProfileEditor.Terminal
 
 .RuleFor(o => o.Index, f => f.IndexVariable);
             Items = testOrders.Generate(2).ToArray().Cast<Step>().Concat(testOrders2.Generate(1)).ToArray();
-          Key = nameof(MapperStep.Description);
-
+            Key = nameof(MapperStep.Description);
         }
-
-        }
+    }
 }

@@ -14,7 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ETMProfileEditor.Contract\ETMProfileEditor.Contract.csproj" />
     <ProjectReference Include="..\ETMProfileEditor.Model\ETMProfileEditor.Model.csproj" />
-    <ProjectReference Include="..\ETMProfileEditror.ViewModel\ETMProfileEditor.ViewModel.csproj" />
+    <ProjectReference Include="..\ETMProfileEditor.ViewModel\ETMProfileEditor.ViewModel.csproj" />
   </ItemGroup>
 
   <ItemGroup>

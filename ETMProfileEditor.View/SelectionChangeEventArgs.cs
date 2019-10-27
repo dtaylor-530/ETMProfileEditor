@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 
 namespace ETMProfileEditor.View
 {
@@ -17,5 +14,4 @@ namespace ETMProfileEditor.View
             IsSelected = isSelected;
         }
     }
-
 }

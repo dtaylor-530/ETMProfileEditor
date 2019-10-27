@@ -1,26 +1,24 @@
 ﻿using ETMProfileEditor.Contract;
-using ETMProfileEditor.ViewModel;
 using Reactive.Bindings;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace ETMProfileEditor.Terminal
 {
     using Common;
+    using ViewModel;
     using System.Windows.Input;
 
     public class MainViewModel
     {
         private readonly IRepository<Profile, string> profileRepository;
 
-        public MainViewModel(ISelect<Model.Limit> limits, 
-            IRepository<Profile, string> profileRepository, 
+        public MainViewModel(ISelect<Model.Limit> limits,
+            IRepository<Profile, string> profileRepository,
             IDispatcher dispatcher,
             IFactory<ViewModel.Profile> factory)
         {
-  
-            RepositoryViewModel = new RepositoryViewModel(dispatcher,factory);
+            RepositoryViewModel = new RepositoryViewModel(dispatcher, factory);
             this.profileRepository = profileRepository;
 
             this.AddItems();
@@ -29,7 +27,7 @@ namespace ETMProfileEditor.Terminal
 
             (SaveCommand as ReactiveCommand).Subscribe(a =>
             {
-            foreach (var profile in RepositoryViewModel.Items.Select(a=> a.Value))
+                foreach (var profile in RepositoryViewModel.Items.Select(a => a.Value))
                 {
                     profileRepository.UpSert((Profile)profile);
                 }
@@ -39,7 +37,6 @@ namespace ETMProfileEditor.Terminal
         public ICommand SaveCommand { get; } = new ReactiveCommand();
 
         public RepositoryViewModel RepositoryViewModel { get; }
-
 
         private void CollectionChanged(CollectionChanged<SelectDeleteItem> selectDeleteItem)
         {
@@ -52,7 +49,6 @@ namespace ETMProfileEditor.Terminal
                 profileRepository.Delete((Profile)(selectDeleteItem.Value.Value));
             }
         }
-     
 
         private void AddItems()
         {
@@ -62,7 +58,6 @@ namespace ETMProfileEditor.Terminal
             {
                 RepositoryViewModel.Items.Add(new SelectDeleteItem(profile));
             }
-
         }
     }
 }

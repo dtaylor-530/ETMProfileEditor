@@ -30,7 +30,7 @@
                         <materialDesign:PackIcon Kind="ContentSave" />
                     </Button>
                 </ToolBar>
-                <view:RepositoryView DataContext="{Binding RepositoryViewModel}" >
+                <view:RepositoryView DataContext="{Binding RepositoryViewModel}">
                     <view:RepositoryView.ItemTemplate>
                         <DataTemplate>
                             <local:MasterDetailView ></local:MasterDetailView>

@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:ETMProfileEditor.View"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
 
@@ -13,16 +14,26 @@
                                               IsDesignTimeCreatable=True}"-->
     <DockPanel x:Name="DockPanel">
         <DockPanel.Resources>
-      
-                <Style TargetType="{x:Type Button}" x:Key="B">
-                <Setter Property="Height" Value="100"/>
-                <Setter Property="Width" Value="100"/>
-                    <!--<Setter Property="Margin" Value="16"/>-->
-                </Style>
-            <local:IsEmptyConverter x:Key="IsEmptyConverter"></local:IsEmptyConverter>
+
+            <Style TargetType="{x:Type Button}" x:Key="B">
+                <Setter Property="Height" Value="100" />
+                <Setter Property="Width" Value="100" />
+                <!--<Setter Property="Margin" Value="16" />-->
+            </Style>
+
+
+            <CollectionViewSource Source="{Binding Objects, Mode=OneWay}"
+                                  x:Key="collectionView"       
+                                  IsLiveSortingRequested="True">
+                <CollectionViewSource.SortDescriptions>
+                    <scm:SortDescription PropertyName="Index" Direction="Ascending"/>
+                </CollectionViewSource.SortDescriptions>
+            </CollectionViewSource>
+         
+            <local:CountConverter x:Key="CountConverter" Invert="True"></local:CountConverter>
         </DockPanel.Resources>
 
-        <ToolBar DockPanel.Dock="Bottom" Height="100" x:Name="ToolBar1">
+        <ToolBar DockPanel.Dock="Bottom" Height="100" x:Name="ToolBar1" >
 
             <materialDesign:PopupBox Background="Transparent"
                                      Height="100"
@@ -36,11 +47,10 @@
                     </ItemsControl.Resources>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Button Click="Button_Click" 
-                                    Width="150" 
-                                    Background="Transparent" 
+                            <Button Click="Button_Click"
+                                    Width="150"
+                                    Background="Transparent"
                                     Content="{Binding Converter={StaticResource TypeNameConverter}}">
-
                             </Button>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -51,19 +61,21 @@
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
             </materialDesign:PopupBox>
-            <Button Click="Remove_Click" Style="{StaticResource B}"  IsEnabled="{Binding CollectionView, Converter={StaticResource IsEmptyConverter}}">
+     
+            <Button Click="Remove_Click" Style="{StaticResource B}" 
+                    IsEnabled="{Binding Objects, Converter={StaticResource CountConverter}, ConverterParameter=0}">
                 <materialDesign:PackIcon Kind="Remove" />
             </Button>
-            <Button Click="Up_Click" Style="{StaticResource B}" IsEnabled="{Binding CollectionView, Converter={StaticResource IsEmptyConverter}}">
+            <Button Click="Up_Click" Style="{StaticResource B}" IsEnabled="{Binding Objects, Converter={StaticResource CountConverter}, ConverterParameter=1}">
                 <materialDesign:PackIcon Kind="ArrowUp" />
             </Button>
-            <Button Click="Down_Click" Style="{StaticResource B}"  IsEnabled="{Binding CollectionView, Converter={StaticResource IsEmptyConverter}}">
+            <Button Click="Down_Click" Style="{StaticResource B}"  IsEnabled="{Binding Objects, Converter={StaticResource CountConverter}, ConverterParameter=1}">
                 <materialDesign:PackIcon Kind="ArrowDown" />
             </Button>
         </ToolBar>
         <ListView AllowDrop="True" DockPanel.Dock="Top"
-                  ItemsSource="{Binding CollectionView, Mode=OneWay}"
-                 x:Name="ListView"        
+                  ItemsSource="{Binding Source={StaticResource collectionView}, Mode=OneWay}"
+                 x:Name="ListView"
                   SelectedIndex="0"
                   HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
                    MinWidth="200">
@@ -82,14 +94,12 @@
                 <DataTemplate>
                     <StackPanel>
                         <TextBlock Text="{Binding Index}"></TextBlock>
-                        <ContentPresenter Content="{Binding Value}" 
+                        <ContentPresenter Content="{Binding Value}"
                                           ContentTemplate="{Binding DataContext.ItemTemplate, RelativeSource={RelativeSource AncestorType=ListView}}">
                         </ContentPresenter>
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-      
-
     </DockPanel>
 </UserControl>

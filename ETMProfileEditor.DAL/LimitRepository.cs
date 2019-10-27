@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace ETMProfileEditor.DAL
 {
-    public class LimitRepository:ISelect<Limit>
+    public class LimitRepository : ISelect<Limit>
     {
         public IEnumerable<Limit> Select()
         {

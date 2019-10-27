@@ -3,19 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:ETMProfileEditor.Terminal"
              xmlns:viewmodel="clr-namespace:ETMProfileEditor.ViewModel;assembly=ETMProfileEditor.ViewModel"
-             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-          >
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit">
     <Application.Resources>
         <ResourceDictionary>
 
-            <!--<DataTemplate DataType="{x:Type viewmodel:Step}"  >
+            <!--<DataTemplate DataType="{x:Type viewmodel:Step}">
                 <Border>
                     <Grid Margin="4" Width="200" Height="40" Background="Gainsboro">
                         <TextBlock Text="{Binding Description,Mode=OneWay}"></TextBlock>
                     </Grid>
                 </Border>
             </DataTemplate>-->
-            <DataTemplate DataType="{x:Type viewmodel:MapperStep}"  >
+            <DataTemplate DataType="{x:Type viewmodel:MapperStep}">
                 <Border>
                     <Grid Margin="4" Width="200" Height="40" Background="Gainsboro">
                         <TextBlock Text="{Binding Description,Mode=OneWay}"></TextBlock>
@@ -29,10 +28,10 @@
                     </Grid>
                 </Border>
             </DataTemplate>
-            
+
             <DataTemplate DataType="{x:Type viewmodel:SelectDeleteItem}">
                 <Grid>
-                    <Ellipse Height="30" Width="30" >
+                    <Ellipse Height="30" Width="30">
                         <Ellipse.Fill>
                             <SolidColorBrush Color="{StaticResource Primary500}" />
                         </Ellipse.Fill>
@@ -40,7 +39,7 @@
                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">A</TextBlock>
                 </Grid>
             </DataTemplate>
-            
+
             <SolidColorBrush x:Key="HighlightBrush" Color="{DynamicResource Primary700}" />
             <SolidColorBrush x:Key="AccentColorBrush" Color="{DynamicResource Primary500}" />
             <SolidColorBrush x:Key="AccentColorBrush2" Color="{DynamicResource Primary400}" />
@@ -56,7 +55,6 @@
             <SolidColorBrush x:Key="RightArrowFill" Color="{DynamicResource Primary500}" />
             <SolidColorBrush x:Key="IdealForegroundColorBrush" Color="{DynamicResource Primary500Foreground}" />
             <SolidColorBrush x:Key="IdealForegroundDisabledBrush" Color="{DynamicResource Primary500}" Opacity="0.4" />
-            
 
             <ResourceDictionary.MergedDictionaries>
                 <!-- MahApps -->
@@ -81,10 +79,8 @@
                 <!-- Material Design: MahApps Compatibility -->
                 <!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.MahApps;component/Themes/MaterialDesignTheme.MahApps.Fonts.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.MahApps;component/Themes/MaterialDesignTheme.MahApps.Flyout.xaml" />-->
-            
 
-            <!-- MahApps Brushes -->
-       
+                <!-- MahApps Brushes -->
             </ResourceDictionary.MergedDictionaries>
 
             <!--<DataTemplate DataType="{x:Type model:Profile}">
@@ -92,7 +88,9 @@
                     <Grid Margin="4">
 
                         <xctk:PropertyGrid x:Name="_propertyGrid" Width="450" Margin="10"    SelectedObject="{Binding}"   AutoGenerateProperties="True">
-                            --><!-- Only the following properties will be displayed in the PropertyGrid --><!--
+                            -->
+            <!-- Only the following properties will be displayed in the PropertyGrid -->
+            <!--
                         </xctk:PropertyGrid>
                     </Grid>
                 </Border>
@@ -102,24 +100,26 @@
                     <Grid Margin="4">
 
                         <xctk:PropertyGrid x:Name="_propertyGrid" Width="450" Margin="10"   SelectedObject="{Binding}"  AutoGenerateProperties="True">
-                            --><!-- Only the following properties will be displayed in the PropertyGrid --><!--
+                            -->
+            <!-- Only the following properties will be displayed in the PropertyGrid -->
+            <!--
                         </xctk:PropertyGrid>
                     </Grid>
                 </Border>
             </DataTemplate>-->
-   
+
             <!--<DataTemplate DataType="{x:Type viewmodel:Step}">
                 <Border>
                     <Grid Margin="4">
 
                         <xctk:PropertyGrid x:Name="_propertyGrid" Width="450" Margin="10"   SelectedObject="{Binding}"  AutoGenerateProperties="True">
-                            --><!-- Only the following properties will be displayed in the PropertyGrid --><!--
+                            -->
+            <!-- Only the following properties will be displayed in the PropertyGrid -->
+            <!--
                         </xctk:PropertyGrid>
                     </Grid>
                 </Border>
             </DataTemplate>-->
-
-  
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace ETMProfileEditor.Contract
 {
-    public interface IRepository<T,Tr>:ISelect<T>
+    public interface IRepository<T, Tr> : ISelect<T>
     {
         T Find(Tr tr);
 
@@ -12,7 +10,6 @@ namespace ETMProfileEditor.Contract
 
         void Delete(T profile);
     }
-
 
     public interface ISelect<T>
     {

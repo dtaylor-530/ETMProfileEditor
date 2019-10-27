@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ETMProfileEditor.Model
+﻿namespace ETMProfileEditor.Model
 {
     public interface IStep
     {

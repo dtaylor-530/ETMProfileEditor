@@ -11,10 +11,20 @@ namespace ETMProfileEditor.ViewModel
 
     public class ValidatableLimitViewModelBase:ValidatableViewModelBase
     {
+        private IEnumerable<Limit> limits;
+
         /// <summary>
         /// Needs to be stored in LiteDb database.
         /// </summary>
-        public IEnumerable<Limit> Limits { get;  set; }
+        public IEnumerable<Limit> Limits
+        {
+            get => limits;
+            set
+            {
+                limits = value;
+                ValidatorFactory.ConfigureValidationRules(this, Validator, Limits);
+            }
+        }
 
         public ValidatableLimitViewModelBase(ISelect<Limit> limitRepository)
         {
