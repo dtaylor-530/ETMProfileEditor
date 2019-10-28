@@ -1,12 +1,14 @@
 # ETMProfileEditor
  Master-Detail-View Editor
 
-- [x] Everything so far
 
 ## To Do:
-
-- [ ] Enable steps changing when moving between profiles 
-- [ ] The display of parameters within the steps
+- [x] Everything so far
+- [x] Persist changes to Steps in Profiles
+- [x] Add drag-drop
+- [ ] Fix steps disapearing
+- [ ] Prevent user changing Profiles while Step has error.
+- [ ] Fix the display of parameters within the steps
 
 
 
@@ -23,6 +25,7 @@
   
   ![Kiku](Images/Remove_Steps.png)
  
+ ![Kiku](Images/drag_drop.png)
   
    ![Kiku](Images/delete_profile.png)
   
