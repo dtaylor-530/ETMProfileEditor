@@ -16,6 +16,5 @@
 
         public object Value { get => value; set => SetProperty(ref this.value, value); }
 
-        //public bool Selected { get => selected; set => SetProperty(ref this.selected, value); }
     }
 }

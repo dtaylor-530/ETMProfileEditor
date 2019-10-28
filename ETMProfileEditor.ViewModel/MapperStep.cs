@@ -1,7 +1,6 @@
 ﻿using ETMProfileEditor.Model;
 using MvvmValidation;
 
-
 namespace ETMProfileEditor.ViewModel
 {
     using Contract;
@@ -14,7 +13,6 @@ namespace ETMProfileEditor.ViewModel
         private double temperature = 0;
         private ControlProbe temperatureControlProbe;
         private bool temperatureControlEnabled;
-
 
         public bool TemperatureControlEnabled
         {
@@ -52,7 +50,6 @@ namespace ETMProfileEditor.ViewModel
             set => SetProperty(ref idleSpeed, value);
         }
 
-
         protected override void ConfigureValidationRules()
         {
             ValidatorFactory.ConfigureValidationRules(this, Validator);
@@ -67,13 +64,12 @@ namespace ETMProfileEditor.ViewModel
         {
         }
 
-        class ValidatorFactory
+        private class ValidatorFactory
         {
             public static void ConfigureValidationRules(MapperStep mainViewModel, ValidationHelper Validator)
             {
                 Validator.AddRequiredRule(() => mainViewModel.Temperature, "Temperature is required");
             }
         }
-
     }
 }

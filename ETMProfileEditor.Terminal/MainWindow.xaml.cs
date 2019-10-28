@@ -26,15 +26,9 @@ namespace ETMProfileEditor.Terminal
         {
             //foreach (var x in e.Dictionary)
             //{
-            //   if(dict.Add(x.Key))
-            //    {
-            //        (x.Key as ViewModel.Step).IsValid.Subscribe(a =>
-            //        {
-            //            CheckAll();
-
-            //        });
-            //    }
             //}
+
+            ViewModel.RepositoryViewModel.SelectedContentChangedCommand.Execute(e.Dictionary);
         }
 
         //private void CheckAll()

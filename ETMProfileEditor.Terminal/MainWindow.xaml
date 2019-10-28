@@ -10,13 +10,8 @@
         d:DataContext="{d:DesignInstance local:DesignViewModel, IsDesignTimeCreatable=True}"
         Background="{DynamicResource MaterialDesignPaper}"
         mc:Ignorable="d"
-        xmlns:gu="http://gu.se/PropertyGrid"
-        xmlns:sf="clr-namespace:SoftFluent.Windows;assembly=SoftFluent.Windows"
-        xmlns:pt="clr-namespace:PropertyTools.Wpf;assembly=PropertyTools.Wpf"
         Title="MainWindow" Height="450" Width="1500">
 
-    <TabControl>
-        <TabItem Header="Main">
             <DockPanel>
                 <ToolBar DockPanel.Dock="Top" ToolTip="">
 
@@ -33,14 +28,11 @@
                 <view:RepositoryView DataContext="{Binding RepositoryViewModel}">
                     <view:RepositoryView.ItemTemplate>
                         <DataTemplate>
-                            <local:MasterDetailView ></local:MasterDetailView>
+                            <local:MasterDetailView CollectionChange="MasterView_CollectionChange">
+                            </local:MasterDetailView>
                         </DataTemplate>
                     </view:RepositoryView.ItemTemplate>
                 </view:RepositoryView>
             </DockPanel>
-        </TabItem>
-        <TabItem Header="Repo">
-            <view:RepositoryView></view:RepositoryView>
-        </TabItem>
-    </TabControl>
+
 </Window>

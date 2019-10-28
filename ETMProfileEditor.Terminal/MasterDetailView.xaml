@@ -19,10 +19,12 @@
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
-            <Label FontSize="17" FontWeight="Bold" >Steps</Label>
+            <Label FontSize="17" FontWeight="Bold">Steps</Label>
             <view:MasterView x:Name="MasterView1"  Grid.Row="1"
-                             Items="{Binding Steps, Mode=OneTime}"
-                             Key="Description">
+                             Items="{Binding Steps, Mode=OneWay}"
+                             Index="Index"
+                             Key="Description"
+                             CollectionChange="MasterView1_CollectionChange">
                 <view:MasterView.Resources>
                     <view:PropertyConverter x:Key="PropertyConverter"></view:PropertyConverter>
                 </view:MasterView.Resources>
@@ -42,17 +44,16 @@
                     <EventTrigger RoutedEvent="view:MasterView.SelectionChange">
                         <BeginStoryboard>
                             <Storyboard>
-                                <DoubleAnimation
-            Storyboard.Target="{Binding ElementName=DetailView}"
-            Storyboard.TargetProperty="Opacity"
-            From="0.0" To="1.0" Duration="0:0:0.7" />
+                                <DoubleAnimation Storyboard.Target="{Binding ElementName=DetailView}"
+                                                 Storyboard.TargetProperty="Opacity"
+                                                 From="0.0" To="1.0" Duration="0:0:0.7" />
                             </Storyboard>
                         </BeginStoryboard>
                     </EventTrigger>
                 </view:MasterView.Triggers>
             </view:MasterView>
         </Grid>
-        <Grid x:Name="DetailView">
+        <Grid x:Name="DetailView" Width="700">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"></RowDefinition>

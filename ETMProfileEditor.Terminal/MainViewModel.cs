@@ -5,9 +5,9 @@ using System.Linq;
 
 namespace ETMProfileEditor.Terminal
 {
-    using Common;
-    using ViewModel;
+    using System.Threading.Tasks;
     using System.Windows.Input;
+    using ViewModel;
 
     public class MainViewModel
     {
@@ -25,39 +25,43 @@ namespace ETMProfileEditor.Terminal
 
             RepositoryViewModel.Items.ToCollectionChanged().Subscribe(CollectionChanged);
 
-            (SaveCommand as ReactiveCommand).Subscribe(a =>
+            (SaveCommand as ReactiveCommand).Subscribe(async a =>
             {
-                foreach (var profile in RepositoryViewModel.Items.Select(a => a.Value))
+                await Task.Run(() =>
                 {
-                    profileRepository.UpSert((Profile)profile);
-                }
+                    foreach (var profile in RepositoryViewModel.Items.Select(a => a.Value))
+                    {
+                        profileRepository.UpSert((Profile)profile);
+                    }
+                });
             });
         }
 
-        public ICommand SaveCommand { get; } = new ReactiveCommand();
-
         public RepositoryViewModel RepositoryViewModel { get; }
 
-        private void CollectionChanged(CollectionChanged<SelectDeleteItem> selectDeleteItem)
-        {
-            if (selectDeleteItem.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                profileRepository.UpSert((Profile)(selectDeleteItem.Value.Value));
-            }
-            else if (selectDeleteItem.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                profileRepository.Delete((Profile)(selectDeleteItem.Value.Value));
-            }
-        }
+        public ICommand SaveCommand { get; } = new ReactiveCommand();
 
         private void AddItems()
         {
-            var types = TypeHelper.Filter<ViewModel.Step>().ToArray();
-
             foreach (var profile in profileRepository.Select())
             {
                 RepositoryViewModel.Items.Add(new SelectDeleteItem(profile));
             }
+        }
+
+        private async void CollectionChanged(CollectionChanged<SelectDeleteItem> selectDeleteItem)
+        {
+            await Task.Run(() =>
+            {
+                if (selectDeleteItem.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+                {
+                    profileRepository.UpSert((Profile)(selectDeleteItem.Value.Value));
+                }
+                else if (selectDeleteItem.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+                {
+                    profileRepository.Delete((Profile)(selectDeleteItem.Value.Value));
+                }
+            });
         }
     }
 }

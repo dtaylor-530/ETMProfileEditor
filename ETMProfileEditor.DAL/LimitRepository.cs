@@ -17,12 +17,5 @@ namespace ETMProfileEditor.DAL
                 return csv.GetRecords<Limit>().ToArray();
             }
         }
-
-        //        var csv = System.IO.File.ReadAllText("sample.csv");
-        //foreach (var line in CsvReader.ReadFromText(csv))
-        //{
-        //    // Header is handled, each line will contain the actual row data
-        //    var firstCell = line[0];
-        //        var byName = line["Column name"];
     }
 }

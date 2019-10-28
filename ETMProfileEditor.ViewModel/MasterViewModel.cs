@@ -1,5 +1,4 @@
-﻿
-using Reactive.Bindings;
+﻿using Reactive.Bindings;
 using System.Collections.ObjectModel;
 
 namespace ETMProfileEditor.ViewModel
@@ -13,15 +12,13 @@ namespace ETMProfileEditor.ViewModel
         /// </summary>
         public ReactiveProperty<Step> Selected { get; }
 
-
         public string Key { get; }
+
         /// <summary>
         /// Constructor for the MainWindowViewModel
         /// </summary>
         public MainViewModel()
         {
-
-
         }
     }
 }

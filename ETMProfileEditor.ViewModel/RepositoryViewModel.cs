@@ -2,12 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Windows.Input;
 using System.Reactive.Linq;
-using System.Collections.ObjectModel;
-using System.Diagnostics.CodeAnalysis;
-
+using System.Windows.Input;
 
 namespace ETMProfileEditor.ViewModel
 {
@@ -20,15 +16,17 @@ namespace ETMProfileEditor.ViewModel
         public ICommand UndoCommand { get; }
 
         public ICommand AddCommand { get; }
+
         public ICommand NameChangedCommand { get; }
 
+        public ICommand SelectedContentChangedCommand { get; }
 
         public RepositoryViewModel(IDispatcher dispatcher, IFactory<Profile> profileFactory)
         {
             UndoCommand = new ReactiveCommand();
             AddCommand = new ReactiveCommand<bool>();
             NameChangedCommand = new ReactiveCommand<string>();
-
+            SelectedContentChangedCommand = new ReactiveCommand<object>();
             this.dispatcher = dispatcher;
             //Items = new ReactiveCollection<SelectDeleteItem>(Enumerable.Range(0, 10).Select(a => new SelectDeleteItem()).ToObservable()); ;
 
@@ -42,12 +40,10 @@ namespace ETMProfileEditor.ViewModel
 
             //selects2.DelaySubscription(TimeSpan.FromSeconds(1)).Subscribe(a =>
             //{
-
             //});
 
             //selects3.Subscribe(a =>
             //{
-
             //});
 
             this.Deletes = deletes.Select(a => a.Value).ToReactiveCollection();
@@ -73,16 +69,16 @@ namespace ETMProfileEditor.ViewModel
 
             //    //if (!string.IsNullOrWhiteSpace(FruitTextBox.Text))
             //    //    FruitListBox.Items.Add(FruitTextBox.Text.Trim());
-            //});        
+            //});
 
             (AddCommand as ReactiveCommand<bool>)
-                .Where(b=>b)
-                .WithLatestFrom((NameChangedCommand as ReactiveCommand<string>), (bl,text) => text)
+                .Where(b => b)
+                .WithLatestFrom((NameChangedCommand as ReactiveCommand<string>), (bl, text) => text)
                 .Subscribe(text =>
                  {
                      Items.Add(new SelectDeleteItem(profileFactory.Build(text)));
                  });
-           
+
             SelectedItem = selects.Merge(selects2).Where(a => a.Key).Select(a => a.Value).ToReactiveProperty();
             //mode: ReactivePropertyMode.DistinctUntilChanged
             selects.Subscribe(a =>
@@ -108,16 +104,19 @@ namespace ETMProfileEditor.ViewModel
             // For some reason doesn't pick up initial selecteditem
             SelectedItem.Where(a => a != null).Take(1).Subscribe(a =>
             {
-                 this.dispatcher.InvokeAsync(() => this.SelectedItem.Value = a);
+                this.dispatcher.InvokeAsync(() => this.SelectedItem.Value = a);
+            });
+
+            (SelectedContentChangedCommand as ReactiveCommand<object>).Subscribe(a =>
+            {
+                (SelectedItem.Value.Value as Profile).Steps = (a as Dictionary<object, int>).Select(ba => ba.Key).Cast<Step>().ToArray();
             });
         }
+
         public ReactiveProperty<SelectDeleteItem> SelectedItem { get; }
 
         public ReactiveCollection<SelectDeleteItem> Items { get; } = new ReactiveCollection<SelectDeleteItem>();
 
         public ReactiveCollection<SelectDeleteItem> Deletes { get; }
     }
-
-
 }
-

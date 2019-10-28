@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections;
-using System.ComponentModel;
 using System.Globalization;
-using System.Windows.Data;
 using System.Linq;
 using System.Windows;
+using System.Windows.Data;
 
 namespace ETMProfileEditor.View
 {
     internal class CountConverter : IValueConverter
     {
         public bool Invert { get; set; }
-
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

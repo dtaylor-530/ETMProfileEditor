@@ -90,20 +90,20 @@ namespace ETMProfileEditor.ViewModel
         public ReadOnlyReactiveProperty<string> ValidationErrorsString { get; }
 
         public ReactiveProperty<bool> IsValid { get; } = new ReactiveProperty<bool>();
-        //{
-        //    get { return isValid; }
-        //    private set
-        //    {
-        //        isValid = value;
-        //        OnPropertyChanged(nameof(IsValid));
-        //    }
-        //}
+
 
         #region Implementation of INotifyDataErrorInfo
 
         public IEnumerable GetErrors(string propertyName)
         {
-            return NotifyDataErrorInfoAdapter.GetErrors(propertyName);
+            try
+            {
+                return NotifyDataErrorInfoAdapter.GetErrors(propertyName);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         public bool HasErrors => NotifyDataErrorInfoAdapter.HasErrors;

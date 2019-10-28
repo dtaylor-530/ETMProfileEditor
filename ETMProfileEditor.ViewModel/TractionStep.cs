@@ -1,9 +1,6 @@
 ﻿using ETMProfileEditor.Model;
 using MvvmValidation;
-using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Linq;
 
 namespace ETMProfileEditor.ViewModel
 {
@@ -16,15 +13,16 @@ namespace ETMProfileEditor.ViewModel
         private double ballLoad;
         private bool unloadAtEnd;
         private bool measureDiscTrackRadius;
+
         //private List<double> slideRollRatios;
         private bool temperatureControlEnabled;
+
         private ControlProbe temperatureControlProbe;
         private double temperature;
         private bool waitForTemperatureToStabilise;
         private double idleSpeed;
         private double idleSlideRollRatio;
         private double idleLoad;
-
 
         public bool UnloadAtEnd
         {
@@ -37,7 +35,6 @@ namespace ETMProfileEditor.ViewModel
             get => measureDiscTrackRadius;
             set => SetProperty(ref measureDiscTrackRadius, value);
         }
-
 
         [Slidable(LargeChange = 10, SmallChange = 0.1)]
         [FormatString("0.00")]
@@ -54,7 +51,6 @@ namespace ETMProfileEditor.ViewModel
             get => ballLoad;
             set => SetProperty(ref ballLoad, value);
         }
-
 
         [Category("Temperature")]
         public bool WaitForTemperatureToStabilise
@@ -125,7 +121,6 @@ namespace ETMProfileEditor.ViewModel
             set => SetProperty(ref idleLoad, value);
         }
 
-
         protected override void ConfigureValidationRules()
         {
             ValidatorFactory.ConfigureValidationRules(this, Validator);
@@ -140,13 +135,12 @@ namespace ETMProfileEditor.ViewModel
         {
         }
 
-        class ValidatorFactory
+        private class ValidatorFactory
         {
             public static void ConfigureValidationRules(TractionStep mainViewModel, ValidationHelper Validator)
             {
                 Validator.AddRequiredRule(() => mainViewModel.Temperature, "Temperature is required");
             }
         }
-
     }
 }

@@ -1,15 +1,13 @@
 ﻿using ETMProfileEditor.Model;
 using MvvmValidation;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace ETMProfileEditor.ViewModel
 {
     using Contract;
 
-    public class ValidatableLimitViewModelBase:ValidatableViewModelBase
+    public class ValidatableLimitViewModelBase : ValidatableViewModelBase
     {
         private IEnumerable<Limit> limits;
 
@@ -32,31 +30,30 @@ namespace ETMProfileEditor.ViewModel
             ValidatorFactory.ConfigureValidationRules(this, Validator, Limits);
         }
 
-
         protected override void ConfigureValidationRules()
         {
             ValidatorFactory.ConfigureValidationRules(this, Validator, Limits);
         }
 
-        class ValidatorFactory
+        private class ValidatorFactory
         {
             public static void ConfigureValidationRules(ValidatableLimitViewModelBase mainViewModel, ValidationHelper Validator, IEnumerable<Limit> limits)
             {
                 var type = mainViewModel.GetType();
                 var props = type.GetProperties();
-                if(limits!=null)
-                foreach (var item in limits.Where(l => l.Type.Equals(type.Name)))
-                {
-                    Validator.AddRule(item.Variable,
-                        () =>
-                            RuleResult.Assert((double)props.SingleOrDefault(p => p.Name == item.Variable).GetValue(mainViewModel) >= item.Minimum, "Value too low")
-                        );
+                if (limits != null)
+                    foreach (var item in limits.Where(l => l.Type.Equals(type.Name)))
+                    {
+                        Validator.AddRule(item.Variable,
+                            () =>
+                                RuleResult.Assert((double)props.SingleOrDefault(p => p.Name == item.Variable).GetValue(mainViewModel) >= item.Minimum, "Value too low")
+                            );
 
-                    Validator.AddRule(item.Variable,
-                        () =>
-                        RuleResult.Assert((double)props.SingleOrDefault(p => p.Name == item.Variable).GetValue(mainViewModel) <= item.Maximum, "Value too High")
-                        );
-                }
+                        Validator.AddRule(item.Variable,
+                            () =>
+                            RuleResult.Assert((double)props.SingleOrDefault(p => p.Name == item.Variable).GetValue(mainViewModel) <= item.Maximum, "Value too High")
+                            );
+                    }
                 //Validator.AddChildValidatable(() => InterestSelectorViewModel);
             }
         }

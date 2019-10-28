@@ -76,8 +76,7 @@
                 <ItemsControl ItemsSource="{Binding Items, Mode=OneTime}" x:Name="LBox"  Grid.Column="0">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-
-                            <materialDesign:Chip 
+                            <materialDesign:Chip
                                              Background="Transparent"
                                  IsDeletable="True"
                                  x:Name="ButtonsDemoChip"
@@ -86,7 +85,7 @@
                                  ToolTip="Delete a Profile"
                                  DeleteToolTip="Delete">
                                 <materialDesign:Chip.Content>
-                                    <TextBlock Text="{Binding Value}"/>
+                                    <TextBlock Text="{Binding Value}" />
                                 </materialDesign:Chip.Content>
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Click">
@@ -121,7 +120,6 @@
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
-
                 <Button  Grid.Column="1" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                     Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
                                     VerticalAlignment="Center" HorizontalAlignment="Right"
@@ -140,31 +138,19 @@
                 <SolidColorBrush Color="{StaticResource Primary500}" />
             </Grid.Background>-->
 
-            <ContentPresenter Content="{Binding SelectedItem.Value.Value}"  x:Name="ContentPresenter1"/>
-
+            <ContentPresenter Content="{Binding SelectedItem.Value.Value}"  x:Name="ContentPresenter1">
+            </ContentPresenter>
         </Grid>
 
-        <!-- example 2 -->
+
         <Border Background="{DynamicResource MaterialDesignPaper}"
 
                      Grid.Row="2">
-            <!--Padding="8 0 8 0"-->
-            <Grid>
-                <!--<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    -->
-                <!--<TextBlock TextWrapping="WrapWithOverflow" Style="{DynamicResource MaterialDesignSubheadingTextBlock}">Example 2.</TextBlock>
-                    <TextBlock TextWrapping="WrapWithOverflow" >View source to see message defined in long hand, allowing action button content to be set.</TextBlock>-->
-                <!--
-                    <ToggleButton IsChecked="{Binding ElementName=SnackbarTwo, Path=IsActive, Mode=TwoWay}"
-                                      Margin="0 8 0 0" />
-                </StackPanel>-->
 
-                <smtx:XamlDisplay Key="snackbar_2">
-                    <!-- long hand form for setting the message -->
-                    <materialDesign:Snackbar IsActive="False" x:Name="SnackbarTwo">
-                        <materialDesign:SnackbarMessage Content="Message Deleted" ActionContent="UNDO" ActionClick="Undo_Click" ActionCommand="{Binding UndoCommand}" />
-                    </materialDesign:Snackbar>
-                </smtx:XamlDisplay>
+            <Grid>
+                <materialDesign:Snackbar IsActive="False" x:Name="SnackbarTwo">
+                    <materialDesign:SnackbarMessage Content="Message Deleted" ActionContent="UNDO" ActionClick="Undo_Click" ActionCommand="{Binding UndoCommand}" />
+                </materialDesign:Snackbar>
             </Grid>
         </Border>
     </Grid>

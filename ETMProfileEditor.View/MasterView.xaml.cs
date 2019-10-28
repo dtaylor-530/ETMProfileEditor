@@ -1,14 +1,15 @@
 ﻿using Reactive.Bindings;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using WPF.JoshSmith.ServiceProviders.UI;
 
 namespace ETMProfileEditor.View
 {
@@ -19,6 +20,7 @@ namespace ETMProfileEditor.View
     {
         private ISubject<IEnumerable> ItemChanges = new Subject<IEnumerable>();
         private ISubject<string> KeyChanges = new Subject<string>();
+        private ISubject<string> IndexChanges = new Subject<string>();
 
         public IEnumerable Types
         {
@@ -55,6 +57,7 @@ namespace ETMProfileEditor.View
         private static void ItemsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             (d as MasterView).ItemChanges.OnNext((IEnumerable)e.NewValue);
+            (d as MasterView).Objects.Clear();
         }
 
         public string Key
@@ -67,9 +70,24 @@ namespace ETMProfileEditor.View
         public static readonly DependencyProperty KeyProperty =
             DependencyProperty.Register("Key", typeof(string), typeof(MasterView), new PropertyMetadata(null, KeyChanged));
 
+        public string Index
+        {
+            get { return (string)GetValue(IndexProperty); }
+            set { SetValue(IndexProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Index.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IndexProperty =
+            DependencyProperty.Register("Index", typeof(string), typeof(MasterView), new PropertyMetadata(null, IndexChanged));
+
         private static void KeyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             (d as MasterView).KeyChanges.OnNext((string)e.NewValue);
+        }
+
+        private static void IndexChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            (d as MasterView).IndexChanges.OnNext((string)e.NewValue);
         }
 
         public static readonly RoutedEvent CollectionChangeEvent =
@@ -116,47 +134,52 @@ namespace ETMProfileEditor.View
         public MasterView()
         {
             InitializeComponent();
+            this.Loaded += Window1_Loaded;
+
             DockPanel.DataContext = this;
 
             ListView.SelectionChanged += ListView_SelectionChanged;
 
-            Dictionary<object, object> dictionart = new Dictionary<object, object>();
+            // Dictionary<object, object> dictionart = new Dictionary<object, object>();
 
             ItemChanges.Where(a => a == null).Subscribe(a =>
             {
                 Objects.Clear();
-                dictionart = new Dictionary<object, object>();
+                // dictionart = new Dictionary<object, object>();
             });
 
-            var xd = ItemChanges.Where(a => a != null).CombineLatest(KeyChanges.Where(a => a != null), (a, b) =>
-        {
-            var type = a.Cast<object>().First().GetType();
-            var pi = type.GetProperty(b);
-            Types = Types ?? ETMProfileEditor.Common.TypeHelper.Filter(type.BaseType).ToArray();
+            var obs = ItemChanges.Where(a => a != null).Select(a => a.Cast<object>().Select((a, i) => (a, i)).ToObservable()).Switch();
 
-            var xx = a.Cast<object>()
-            .GroupBy(b =>
-            pi.GetValue(b))
-          .Select(a => a);
-            List<IndexedObject> tempobjects = new List<IndexedObject>();
-            foreach (var x in xx)
+            var xd = obs.CombineLatest(KeyChanges.Where(a => a != null), IndexChanges, (a, b, c) =>
             {
-                if (dictionart.ContainsKey(x.Key) == false)
-                {
-                    dictionart.Add(x.Key, x.First());
-                    int index = tempobjects.Count();
-                    tempobjects.Add(new IndexedObject(x.First(), index));
-                }
-            }
-            return tempobjects
-            .ToObservable();
+                var type = a.a.GetType();
+                var pi = type.GetProperty(b);
 
-            //.Scan((0,default),(a,b)=>((a.Item1 += 1,a.Item2.Single(),b)))
-            //.Scan((0, default(object)), (a, b) => (a.Item1 + 1, b))
-            //.Select(a => new IndexedObject(a.Item2, a.Item1));
-        });
+                int index = c != null ? (int)type.GetProperty(c).GetValue(a.a) : a.i;
+                Types = Types ?? ETMProfileEditor.Common.TypeHelper.Filter(type.BaseType).ToArray();
 
-            Objects = xd.SelectMany(a => a).ToReactiveCollection();
+                return new IndexedObject(a.a, index);
+                //    var xx = a.Cast<object>()
+                //    .GroupBy(b =>
+                //    pi.GetValue(b))
+                //  .Select(a => a);
+                //    List<IndexedObject> tempobjects = new List<IndexedObject>();
+                //    foreach (var x in xx)
+                //    {
+                //        if (dictionart.ContainsKey(x.Key) == false)
+                //        {
+                //            dictionart.Add(x.Key, x.First());
+                //            int index = tempobjects.Count();
+                //            tempobjects.Add(new IndexedObject(x.First(), index));
+                //        }
+                //    }
+                //    return tempobjects
+                //    .ToObservable();
+            });
+
+            Objects = xd.ToReactiveCollection();
+
+            //Objects = xd.SelectMany(a => a).ToReactiveCollection();
 
             var l = Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>(ev => this.Loaded += ev, ev => this.Loaded -= ev);
 
@@ -184,10 +207,10 @@ namespace ETMProfileEditor.View
             //ListView.ItemsSource = icv;
 
             (RemoveItemCommand as ReactiveCommand<object>)
-            .Subscribe(a =>
-            {
-                Remove_Click(null, null);
-            });
+                .Subscribe(a =>
+                {
+                    Remove_Click(null, null);
+                });
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)
@@ -283,5 +306,142 @@ namespace ETMProfileEditor.View
             this.Objects.Add((new IndexedObject(xx, index + 1)));
             //CollectionView.Refresh();
         }
+
+        private ListViewDragDropManager<IndexedObject> dragMgr;
+        private ICollectionView collectionView;
+
+        #region Window1_Loaded
+
+        private void Window1_Loaded(object sender, RoutedEventArgs e)
+        {
+            //// Give the ListView an ObservableCollection of Task
+            //// as a data source.  Note, the ListViewDragManager MUST
+            //// be bound to an ObservableCollection, where the collection's
+            //// type parameter matches the ListViewDragManager's type
+            //// parameter (in this case, both have a type parameter of Task).
+            //ObservableCollection<Task> tasks = Task.CreateTasks();
+            //this.listView.ItemsSource = tasks;
+
+            //this.listView2.ItemsSource = new ObservableCollection<Task>();
+
+            // This is all that you need to do, in order to use the ListViewDragManager.
+
+            // Turn the ListViewDragManager on and off.
+            //this.chkManageDragging.Checked += delegate { this.dragMgr.ListView = this.listView; };
+            //this.chkManageDragging.Unchecked += delegate { this.dragMgr.ListView = null; };
+
+            //// Show and hide the drag adorner.
+            //this.chkDragAdorner.Checked += delegate { this.dragMgr.ShowDragAdorner = true; };
+            //this.chkDragAdorner.Unchecked += delegate { this.dragMgr.ShowDragAdorner = false; };
+
+            //// Change the opacity of the drag adorner.
+            //this.sldDragOpacity.ValueChanged += delegate { this.dragMgr.DragAdornerOpacity = this.sldDragOpacity.Value; };
+
+            //// Apply or remove the item container style, which responds to changes
+            //// in the attached properties of ListViewItemDragState.
+            //this.chkApplyContStyle.Checked += delegate { this.listView.ItemContainerStyle = this.FindResource("ItemContStyle") as Style; };
+            //this.chkApplyContStyle.Unchecked += delegate { this.listView.ItemContainerStyle = null; };
+
+            //// Use or do not use custom drop logic.
+            //this.chkSwapDroppedItem.Checked += delegate { this.dragMgr.ProcessDrop += dragMgr_ProcessDrop; };
+            //this.chkSwapDroppedItem.Unchecked += delegate { this.dragMgr.ProcessDrop -= dragMgr_ProcessDrop; };
+
+            //// Show or hide the lower ListView.
+            //this.chkShowOtherListView.Checked += delegate { this.listView2.Visibility = Visibility.Visible; };
+            //this.chkShowOtherListView.Unchecked += delegate { this.listView2.Visibility = Visibility.Collapsed; };
+
+            // Hook up events on both ListViews to that we can drag-drop
+            // items between them.
+
+            this.collectionView = (DockPanel.Resources["collectionView"] as System.Windows.Data.CollectionViewSource).View;
+            this.dragMgr = new ListViewDragDropManager<IndexedObject>(this.ListView);
+            this.ListView.DragEnter += OnListViewDragEnter;
+            this.ListView.DragEnter += OnListViewDragEnter;
+            this.ListView.Drop += OnListViewDrop;
+            this.ListView.Drop += OnListViewDrop;
+        }
+
+        #endregion Window1_Loaded
+
+        #region dragMgr_ProcessDrop
+
+        // Performs custom drop logic for the top ListView.
+        private void dragMgr_ProcessDrop(object sender, ProcessDropEventArgs<Task> e)
+        {
+            // This shows how to customize the behavior of a drop.
+            // Here we perform a swap, instead of just moving the dropped item.
+
+            int higherIdx = Math.Max(e.OldIndex, e.NewIndex);
+            int lowerIdx = Math.Min(e.OldIndex, e.NewIndex);
+
+            if (lowerIdx < 0)
+            {
+                // The item came from the lower ListView
+                // so just insert it.
+                e.ItemsSource.Insert(higherIdx, e.DataItem);
+            }
+            else
+            {
+                // null values will cause an error when calling Move.
+                // It looks like a bug in ObservableCollection to me.
+                if (e.ItemsSource[lowerIdx] == null ||
+                    e.ItemsSource[higherIdx] == null)
+                    return;
+
+                // The item came from the ListView into which
+                // it was dropped, so swap it with the item
+                // at the target index.
+                e.ItemsSource.Move(lowerIdx, higherIdx);
+                e.ItemsSource.Move(higherIdx - 1, lowerIdx);
+            }
+
+            // Set this to 'Move' so that the OnListViewDrop knows to
+            // remove the item from the other ListView.
+            e.Effects = DragDropEffects.Move;
+        }
+
+        #endregion dragMgr_ProcessDrop
+
+        #region OnListViewDragEnter
+
+        // Handles the DragEnter event for both ListViews.
+        private void OnListViewDragEnter(object sender, DragEventArgs e)
+        {
+            ListView.ItemsSource = Objects;
+            e.Effects = DragDropEffects.Move;
+        }
+
+        #endregion OnListViewDragEnter
+
+        #region OnListViewDrop
+
+        // Handles the Drop event for both ListViews.
+        private void OnListViewDrop(object sender, DragEventArgs e)
+        {
+            if (e.Effects == DragDropEffects.None)
+                return;
+
+            if (sender == this.ListView)
+            {
+                if (this.dragMgr.IsDragInProgress)
+                {
+                    ListView.ItemsSource = collectionView;
+                    Reindex();
+                    //collectionView.Refresh();
+                    return;
+                }
+            }
+        }
+
+        private void Reindex()
+        {
+            int i = 0;
+            foreach (var x in collectionView.SourceCollection.Cast<IndexedObject>())
+            {
+                x.Index = i; i++;
+            }
+        }
+
+        #endregion OnListViewDrop
     }
 }

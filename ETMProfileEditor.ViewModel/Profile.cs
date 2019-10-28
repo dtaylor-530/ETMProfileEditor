@@ -1,25 +1,17 @@
-﻿
-
-using MvvmValidation;
+﻿using MvvmValidation;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace ETMProfileEditor.ViewModel
 {
-    using Contract;
-    using Model;
     using System;
-    using System.Linq;
-    using System.Text;
 
     public class Profile : ValidatableViewModelBase, IEquatable<Profile>
     {
         private string name;
         private string description;
 
-
-
-        public Profile():base()
+        public Profile() : base()
         {
         }
 
@@ -34,24 +26,20 @@ namespace ETMProfileEditor.ViewModel
         /// </summary>
         public string Id => name;
 
-
         public string Description
         {
             get => description;
             set => SetProperty(ref description, value);
         }
 
-
         public ICollection<Step> Steps { get; set; } = new ObservableCollection<Step>();
-
 
         protected override void ConfigureValidationRules()
         {
             ValidatorFactory.ConfigureValidationRules(this, Validator);
-
         }
 
-        class ValidatorFactory
+        private class ValidatorFactory
         {
             public static void ConfigureValidationRules(Profile mainViewModel, ValidationHelper Validator)
             {
@@ -63,7 +51,6 @@ namespace ETMProfileEditor.ViewModel
                 Validator.AddRequiredRule(() => mainViewModel.Description, "Description is required");
             }
         }
-
 
         public override string ToString()
         {
@@ -85,9 +72,4 @@ namespace ETMProfileEditor.ViewModel
             return Name.Length;
         }
     }
-
-
-
-
-   
 }
